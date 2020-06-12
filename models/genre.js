@@ -1,17 +1,19 @@
 const mongoose = require('mongoose');
 const Joi = require('joi');
 
-const Genre = mongoose.model('Genre', new mongoose.Schema({
+const genreSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true,
         minlength: 5,
         maxlength: 50
     }
-}));
+})
+
+const Genre = mongoose.model('Genre', genreSchema);
 
 
-//Function to find genre using ID
+//Function to Validate genre
 function validateGenre(genre) {
     const schema = {
         name: Joi.string().min(5).max(50).required()
@@ -21,3 +23,4 @@ function validateGenre(genre) {
 
 exports.Genre = Genre;
 exports.validateGenre = validateGenre;
+exports.genreSchema = genreSchema;

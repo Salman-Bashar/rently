@@ -1,4 +1,5 @@
 
+const auth = require('../middleware/auth');
 const { Customer, validateCustomer } = require('../models/customer');
 const mongoose = require('mongoose');
 const express = require('express');
@@ -21,22 +22,22 @@ router.get('/:id', async (req, res) => {
 });
 
 //Create a new customer
-router.post('/', async (req, res) => {
+router.post('/', auth, async (req, res) => {
     const { error } = validateCustomer(req.body);
     if (error) return res.status(400).send(error.details[0].message);
 
-    let customer = new Customer ({ 
+    const customer = new Customer ({ 
         name: req.body.name,
         phone: req.body.phone, 
         isGold: req.body.isGold 
     });
-    customer = await customer.save();
+    await customer.save();
     
     res.send(customer);
 });
 
 //Update a customer
-router.put('/:id', async (req, res) => {
+router.put('/:id', auth, async (req, res) => {
     const { error } = validateCustomer(req.body);
     if (error) return res.status(400).send(error.details[0].message);
 
